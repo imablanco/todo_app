@@ -4,12 +4,18 @@ import 'package:uuid/uuid.dart';
 import 'task.dart';
 import 'tasks_db.dart';
 
-class NewTaskScreen extends StatefulWidget {
+class AddOrEditTaskScreen extends StatefulWidget {
+  AddOrEditTaskScreen({this.task});
+
   @override
-  State<StatefulWidget> createState() => NewTaskScreenState();
+  State<StatefulWidget> createState() => AddOrEditTaskScreenState(task);
+
+  final Task task;
 }
 
-class NewTaskScreenState extends State<NewTaskScreen> {
+class AddOrEditTaskScreenState extends State<AddOrEditTaskScreen> {
+  AddOrEditTaskScreenState(this.task);
+
   final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
 
   @override
@@ -23,6 +29,7 @@ class NewTaskScreenState extends State<NewTaskScreen> {
               child: Column(
                 children: <Widget>[
                   TextFormField(
+                    initialValue: task != null ? task.title : null,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(labelText: 'Title'),
                     validator: validateNonNull,
@@ -32,6 +39,7 @@ class NewTaskScreenState extends State<NewTaskScreen> {
                     },
                   ),
                   TextFormField(
+                    initialValue: task != null ? task.description : null,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(labelText: 'Description'),
                     validator: validateNonNull,
@@ -57,7 +65,14 @@ class NewTaskScreenState extends State<NewTaskScreen> {
   void onSaveTask() {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
-      TaskDb.tasks.add(Task(Uuid().v4(), title, description));
+      /*If we are editing, rather than changing passed Task's properties (the
+       are immutable), just remove from DB and create a new one with the same
+        taskId*/
+      if (task != null) {
+        TaskDb.tasks.remove(task);
+      }
+      final taskId = task != null ? task.taskId : Uuid().v4();
+      TaskDb.tasks.add(Task(taskId, title, description, DateTime.now()));
       Navigator.of(context).pop();
     }
   }
@@ -74,4 +89,6 @@ class NewTaskScreenState extends State<NewTaskScreen> {
 
   String title;
   String description;
+
+  final Task task;
 }

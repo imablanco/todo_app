@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'destinations.dart';
 import 'home.dart';
-import 'new_task.dart';
+import 'add_or_edit_task.dart';
 
 void main() => runApp(new MyApp());
 
@@ -24,9 +24,6 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: HomeScreen(),
-      routes: <String, WidgetBuilder>{
-        Destinations.newTask: (BuildContext context) => NewTaskScreen()
-      },
     );
   }
 }

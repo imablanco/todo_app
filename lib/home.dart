@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'destinations.dart';
+import 'add_or_edit_task.dart';
 import 'task.dart';
 import 'task_list_item.dart';
 import 'tasks_db.dart';
@@ -13,23 +13,31 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    /*Sort tasks before displaying them*/
+    TaskDb.tasks.sort((t1, t2) => t2.creationDate.compareTo(t1.creationDate));
+
     return Scaffold(
         appBar: AppBar(title: Text("Home")),
         body: ListView(
             children: TaskDb.tasks.map((Task task) {
-          return new TaskListItem(task, TaskDb.completedTasks[task] ?? false,
-              () => handleOnTaskPressed(task));
+          return TaskListItem(
+              task,
+              TaskDb.completedTasks[task] ?? false,
+              (checked) => onTaskStateChanged(task, checked),
+              () => onTaskClicked(task));
         }).toList()),
         floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () =>
-                Navigator.of(context).pushNamed(Destinations.newTask)));
+            child: Icon(Icons.add), onPressed: () => onTaskClicked(null)));
   }
 
-  void handleOnTaskPressed(Task task) {
+  void onTaskStateChanged(Task task, bool completed) {
     setState(() {
-      bool isCompleted = TaskDb.completedTasks[task] ?? false;
-      TaskDb.completedTasks[task] = !isCompleted;
+      TaskDb.completedTasks[task] = completed;
     });
+  }
+
+  void onTaskClicked(Task task) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => AddOrEditTaskScreen(task: task)));
   }
 }

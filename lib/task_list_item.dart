@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
+
 import 'task.dart';
 
 class TaskListItem extends StatelessWidget {
-
-  TaskListItem(this.task, this.isCompleted, this.onPressed);
+  TaskListItem(this.task, this.isCompleted, this.onChanged, this.onTap);
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: onPressed,
-      leading: new Icon(getIcon()),
-      title: new Text(task.title),
-    );
-  }
-
-  IconData getIcon() {
-    return isCompleted ? Icons.check_box : Icons.check_box_outline_blank;
+    return InkWell(
+        onTap: onTap,
+        child: Row(
+          children: <Widget>[
+            Checkbox(
+              value: isCompleted,
+              onChanged: onChanged,
+            ),
+            Text(task.title)
+          ],
+        ));
   }
 
   final Task task;
-  final VoidCallback onPressed;
+  final ValueChanged<bool> onChanged;
+  final VoidCallback onTap;
   final bool isCompleted;
 }
