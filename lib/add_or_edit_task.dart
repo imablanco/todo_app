@@ -21,7 +21,7 @@ class AddOrEditTaskScreenState extends State<AddOrEditTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('New Task')),
+      appBar: AppBar(title: Text(task != null ? 'Edit Task ': 'New Task')),
       body: Container(
           padding: EdgeInsets.all(20.0),
           child: Form(
@@ -65,9 +65,9 @@ class AddOrEditTaskScreenState extends State<AddOrEditTaskScreen> {
   void onSaveTask() {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
-      /*If we are editing, rather than changing passed Task's properties (the
-       are immutable), just remove from DB and create a new one with the same
-        taskId*/
+      /*If we are editing, rather than changing passed Task's properties
+      (Task object is immutable), just remove from DB and create a new one with
+      the same taskId*/
       if (task != null) {
         TaskDb.tasks.remove(task);
       }

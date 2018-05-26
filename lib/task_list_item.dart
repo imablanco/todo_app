@@ -15,7 +15,22 @@ class TaskListItem extends StatelessWidget {
               value: isCompleted,
               onChanged: onChanged,
             ),
-            Text(task.title)
+            Flexible(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  task.title,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  task.description,
+                  overflow: TextOverflow.ellipsis,
+                )
+              ],
+            ))
           ],
         ));
   }
