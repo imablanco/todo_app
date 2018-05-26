@@ -21,9 +21,11 @@ class HomeScreenState extends State<HomeScreen> {
             if (!snapshot.hasData) {
               return Center(child: CircularProgressIndicator());
             } else if (snapshot.data.documents.isEmpty) {
-              return Center(
-                  child: Text('You have no tasks, you can create '
-                      'them tapping in the + button'));
+              return Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: Center(
+                      child: Text('You have no tasks, you can create '
+                          'them tapping in the + button')));
             }
             return ListView(
               children: snapshot.data.documents.map((DocumentSnapshot d) {
