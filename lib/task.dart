@@ -1,9 +1,10 @@
-class Task{
-  
-  final String taskId;
-  final String title;
-  final String description;
-  final DateTime creationDate;
+class Task {
+  String taskId;
+  String title;
+  String description;
+  DateTime updatedAt;
+  bool isCompleted;
 
-  Task(this.taskId, this.title, this.description, this.creationDate);
+  Task(this.taskId, this.title, this.description, this.updatedAt,
+      {this.isCompleted = false});
 }

@@ -1,8 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 import 'task.dart';
-import 'tasks_db.dart';
 
 class AddOrEditTaskScreen extends StatefulWidget {
   AddOrEditTaskScreen({this.task});
@@ -21,7 +21,7 @@ class AddOrEditTaskScreenState extends State<AddOrEditTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(task != null ? 'Edit Task ': 'New Task')),
+      appBar: AppBar(title: Text(task != null ? 'Edit Task ' : 'New Task')),
       body: Container(
           padding: EdgeInsets.all(20.0),
           child: Form(
@@ -65,15 +65,22 @@ class AddOrEditTaskScreenState extends State<AddOrEditTaskScreen> {
   void onSaveTask() {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
-      /*If we are editing, rather than changing passed Task's properties
-      (Task object is immutable), just remove from DB and create a new one with
-      the same taskId*/
+      Task newTask;
       if (task != null) {
-        TaskDb.tasks.remove(task);
+        task.title = title;
+        task.description = description;
+        task.updatedAt = DateTime.now();
+        newTask = task;
+      } else {
+        newTask = Task(Uuid().v4(), title, description, DateTime.now());
       }
-      final taskId = task != null ? task.taskId : Uuid().v4();
-      TaskDb.tasks.add(Task(taskId, title, description, DateTime.now()));
-      Navigator.of(context).pop();
+
+      Firestore.instance.collection('tasks').document(newTask.taskId).setData({
+        'title': newTask.title,
+        'description': newTask.description,
+        'updatedAt': newTask.updatedAt,
+        'isCompleted': newTask.isCompleted
+      }).then((value) => Navigator.of(context).pop());
     }
   }
 

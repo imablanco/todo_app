@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'task.dart';
 
 class TaskListItem extends StatelessWidget {
-  TaskListItem(this.task, this.isCompleted, this.onChanged, this.onTap);
+  TaskListItem(this.task, this.onChanged, this.onTap, this.onLongPress);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
         onTap: onTap,
+        onLongPress: onLongPress,
         child: Row(
           children: <Widget>[
             Checkbox(
-              value: isCompleted,
+              value: task.isCompleted,
               onChanged: onChanged,
             ),
             Flexible(
@@ -38,5 +39,5 @@ class TaskListItem extends StatelessWidget {
   final Task task;
   final ValueChanged<bool> onChanged;
   final VoidCallback onTap;
-  final bool isCompleted;
+  final VoidCallback onLongPress;
 }
