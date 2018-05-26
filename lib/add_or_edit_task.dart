@@ -5,7 +5,7 @@ import 'package:uuid/uuid.dart';
 import 'task.dart';
 
 class AddOrEditTaskScreen extends StatefulWidget {
-  AddOrEditTaskScreen({this.task});
+  AddOrEditTaskScreen({Key key, this.task}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => AddOrEditTaskScreenState(task);

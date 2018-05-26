@@ -35,14 +35,14 @@ class HomeScreenState extends State<HomeScreen> {
                 return TaskListItem(
                     task,
                     (checked) => onTaskStateChanged(task, checked),
-                    () => onTaskClicked(task),
+                    () => addOrEditTask(task: task),
                     () => onRemoveTask(context, task));
               }).toList(),
             );
           },
         ),
         floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add), onPressed: () => onTaskClicked(null)));
+            child: Icon(Icons.add), onPressed: () => addOrEditTask()));
   }
 
   void onTaskStateChanged(Task task, bool completed) {
@@ -54,7 +54,7 @@ class HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void onTaskClicked(Task task) {
+  void addOrEditTask({Task task}) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => AddOrEditTaskScreen(task: task)));
   }
